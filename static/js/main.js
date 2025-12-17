@@ -93,3 +93,26 @@ async function updateShopUrl(shopId) {
         console.error('Error updating shop URL:', error);
     }
 }
+
+// Setup Loading Overlay for Form Submission
+document.addEventListener('DOMContentLoaded', function () {
+    // Look for the generation form
+    const generateForm = document.querySelector('form[action*="generate"]');
+    const loadingOverlay = document.getElementById('loading-overlay');
+
+    if (generateForm && loadingOverlay) {
+        generateForm.addEventListener('submit', function (e) {
+            // Show overlay
+            loadingOverlay.classList.remove('hidden');
+            // Small delay to allow browser to render the removal of 'hidden' before adding opacity for fade in if we were doing css transition
+            // For now, just forced show is enough functionality-wise.
+            requestAnimationFrame(() => {
+                loadingOverlay.classList.remove('opacity-0');
+            });
+
+            // Optional: Disable button to prevent double submit
+            const btn = generateForm.querySelector('button[type="submit"]');
+            if (btn) btn.disabled = true;
+        });
+    }
+});

@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="px-8 py-6">
+    <!-- Header with Shop Name -->
+    <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+        <div>
+            <span class="text-xs font-bold text-accent tracking-wider uppercase">Current Shop</span>
+            <h2 class="text-lg font-bold text-gray-800">{{ shop.salon_name }}</h2>
+        </div>
+        <a href="{{ url_for('index') }}"
+            class="text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors">
+            変更する
+        </a>
+    </div>
+
+    <form action="{{ url_for('generate_message') }}" method="POST" class="space-y-6">
+
+        <!-- Services -->
+        <div class="space-y-3">
+            <label class="block text-sm font-semibold text-gray-700">利用サービス</label>
+            <div class="grid grid-cols-2 gap-3">
+                {% for service in ['カット', 'パーマ', 'ヘアスタイリング', 'ヘアカラー'] %}
+                <label
+                    class="relative flex items-center justify-center p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-50 hover:border-accent transition-all peer-checked:bg-accent/5 peer-checked:border-accent">
+                    <input type="checkbox" name="services" value="{{ service }}"
+                        class="peer sr-only absolute inset-0 w-full h-full cursor-pointer">
+                    <!-- Custom Checkbox UI Logic via CSS sibling selector logic in style.css or inline-style manipulation -->
+                    <!-- Using simpler logic for now with pure css classes -->
+                    <div class="w-full text-center">
+                        <span class="text-sm font-medium text-gray-600 peer-checked:text-accent">{{ service }}</span>
+                    </div>
+                    <!-- Visual indicator for checked state -->
+                    <div
+                        class="absolute top-2 right-2 w-2 h-2 rounded-full bg-accent opacity-0 scale-0 peer-checked:opacity-100 peer-checked:scale-100 transition-all">
+                    </div>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Style Request -->
+        <div class="space-y-2">
+            <label for="style_request" class="block text-sm font-semibold text-gray-700">リクエストしたスタイル</label>
+            <input type="text" id="style_request" name="style_request" placeholder="例：レイヤーカット＆金髪"
+                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all placeholder-gray-300">
+        </div>
+
+        <!-- Special Tech -->
+        <div class="space-y-2">
+            <label for="special_tech" class="block text-sm font-semibold text-gray-700">使用した特殊技術・薬剤</label>
+            <input type="text" id="special_tech" name="special_tech" placeholder="例：ケアブリーチ"
+                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all placeholder-gray-300">
+        </div>
+
+        <!-- Hair Type -->
+        <div class="space-y-3">
+            <label class="block text-sm font-semibold text-gray-700">髪のタイプ</label>
+
+            <!-- Length -->
+            <div class="space-y-2">
+                <span class="text-xs text-gray-500">長さ</span>
+                <div class="flex flex-wrap gap-2">
+                    {% for length in ['ロング', 'ボブ', 'ショート', '短髪'] %}
+                    <label class="cursor-pointer">
+                        <input type="radio" name="hair_length" value="{{ length }}" class="peer sr-only">
+                        <span
+                            class="inline-block px-3 py-1.5 rounded-full border border-gray-200 bg-white text-xs font-medium text-gray-600 peer-checked:bg-accent peer-checked:text-white peer-checked:border-accent transition-all hover:border-gray-300">
+                            {{ length }}
+                        </span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Firmness -->
+            <div class="space-y-2">
+                <span class="text-xs text-gray-500">硬さ</span>
+                <div class="flex flex-wrap gap-2">
+                    {% for firm in ['硬め', 'やや硬め', 'やや柔らかめ', '柔らかめ'] %}
+                    <label class="cursor-pointer">
+                        <input type="radio" name="hair_firmness" value="{{ firm }}" class="peer sr-only">
+                        <span
+                            class="inline-block px-3 py-1.5 rounded-full border border-gray-200 bg-white text-xs font-medium text-gray-600 peer-checked:bg-accent peer-checked:text-white peer-checked:border-accent transition-all hover:border-gray-300">
+                            {{ firm }}
+                        </span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Stylist Name -->
+        <div class="space-y-2">
+            <label for="stylist_name" class="block text-sm font-semibold text-gray-700">担当スタイリスト</label>
+            <input type="text" id="stylist_name" name="stylist_name" placeholder="担当者名を入力"
+                class="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-accent focus:ring-2 focus:ring-accent/20 outline-none transition-all placeholder-gray-300">
+        </div>
+
+        <div class="pt-4 pb-2">
+            <button type="submit"
+                class="w-full bg-accent hover:bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center space-x-2">
+                <svg class="w-5 h-5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+                <span>文章を生成する</span>
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    /* Custom style for checklist to handle complex peer checking visual if tailwind peer helper has limits (it works fine usually) */
+    /* Adding specific checked-state styles for services just to be sure */
+    input[name="services"]:checked~div span {
+        color: var(--color-accent);
+        font-weight: 700;
+    }
+
+    input[name="services"]:checked+div+div {
+        opacity: 1;
+        transform: scale(1);
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex flex-col h-screen max-h-[800px]"> <!-- Fixed height container for better mobile scrolling -->
+
+    <!-- Header -->
+    <div class="px-8 py-5 border-b border-gray-100 flex-none bg-white z-10">
+        <div class="flex items-center justify-between">
+            <h1 class="text-xl font-heading font-bold text-gray-800">Review Message</h1>
+            <a href="{{ url_for('input_info') }}"
+                class="text-sm text-gray-500 hover:text-accent flex items-center gap-1 transition-colors">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+                </svg>
+                Back
+            </a>
+        </div>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="flex-1 overflow-y-auto px-8 py-6 space-y-6">
+
+        <!-- Shop Changer -->
+        <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
+            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Review URL for</label>
+            <div class="relative">
+                <select id="result_shop_select" onchange="updateShopUrl(this.value)"
+                    class="w-full pl-3 pr-10 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700 outline-none focus:border-accent">
+                    {% for s in shops %}
+                    <option value="{{ s.id }}" {% if s.id==shop.id %}selected{% endif %}>{{ s.salon_name }}</option>
+                    {% endfor %}
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+            </div>
+            <p class="text-[10px] text-gray-400 mt-2">※ 店舗を変更すると、本文内のURLが自動で更新されます。</p>
+        </div>
+
+        <!-- Text Area -->
+        <div class="space-y-2">
+            <div class="flex justify-between items-end">
+                <label class="block text-sm font-semibold text-gray-700">生成されたメッセージ</label>
+                <span class="text-xs text-green-600 font-medium hidden" id="copy_success">Copied!</span>
+            </div>
+            <textarea id="message_area"
+                class="w-full h-80 p-4 rounded-xl border border-gray-200 font-mono text-sm leading-relaxed focus:border-accent focus:ring-1 focus:ring-accent outline-none resize-none text-gray-700 shadow-inner"
+                spellcheck="false">{{ full_text }}</textarea>
+        </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="p-8 border-t border-gray-100 bg-white flex-none">
+        <button onclick="copyToClipboard()"
+            class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2 group">
+            <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+            </svg>
+            <span>テキストをコピー</span>
+        </button>
+        <div class="mt-4 text-center">
+            <a href="{{ url_for('input_info') }}"
+                class="text-xs text-gray-400 hover:text-gray-600 underline">内容を修正する</a>
+        </div>
+    </div>
+
+</div>
+
+<!-- Hidden inputs for JS to use if needed, though we parse text directly usually -->
+<script>
+    const updateUrlEndpoint = "{{ url_for('update_shop_url') }}";
+</script>
+{% endblock %}

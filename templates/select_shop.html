@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="p-8">
+    <div class="text-center mb-10">
+        <h1 class="text-3xl font-heading font-bold text-gray-900 mb-2">Select Salon</h1>
+        <p class="text-gray-500 text-sm">店舗を選択してください</p>
+    </div>
+
+    <form action="{{ url_for('set_shop') }}" method="POST" class="space-y-6">
+        <div class="relative">
+            <select name="shop_id" id="shop_id"
+                class="w-full pl-4 pr-10 py-3 rounded-lg border-2 border-gray-200 focus:border-accent focus:outline-none transition-colors appearance-none bg-white font-medium text-gray-700 cursor-pointer">
+                {% for shop in shops %}
+                <option value="{{ shop.id }}">{{ shop.salon_name }}</option>
+                {% endfor %}
+            </select>
+            <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </div>
+        </div>
+
+        <button type="submit"
+            class="w-full bg-accent hover:bg-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center space-x-2">
+            <span>次へ進む</span>
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+        </button>
+    </form>
+</div>
+{% endblock %}

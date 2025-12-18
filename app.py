@@ -16,24 +16,24 @@ DIFY_API_KEY = os.environ.get('DIFY_API_KEY', 'key-placeholder')
 # Dify API requires a specific Base URL usually, or full URL
 DIFY_API_URL = os.environ.get('DIFY_API_URL', 'https://api.dify.ai/v1/chat-messages')
 
-# Shop Data (Mock Database)
-SHOPS = [
-    {
-        "id": "shop_001",
-        "salon_name": "Review Salon Aoyama",
-        "url": "https://g.page/r/example1/review"
-    },
-    {
-        "id": "shop_002",
-        "salon_name": "Review Salon Shibuya",
-        "url": "https://g.page/r/example2/review"
-    },
-    {
-        "id": "shop_003",
-        "salon_name": "Review Salon Ginza",
-        "url": "https://g.page/r/example3/review"
-    }
-]
+import json
+
+def load_shops():
+    secret_path = "/etc/secrets/shops.json"
+
+    try:
+        with open(secret_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        # ローカル開発用フォールバック
+        try:
+            with open("shops.json", "r", encoding="utf-8") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return []
+
+# Shop Data
+SHOPS = load_shops()
 
 def get_shop_by_id(shop_id):
     """Helper to find shop by ID"""
@@ -174,5 +174,5 @@ def update_shop_url():
     return jsonify({"success": False}), 400
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5003))
+    port = int(os.environ.get('PORT', 5004))
     app.run(host='0.0.0.0', port=port, debug=True)

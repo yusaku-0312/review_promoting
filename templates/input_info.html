@@ -20,7 +20,7 @@
         <div class="space-y-3">
             <label class="block text-sm font-semibold text-gray-700">利用サービス</label>
             <div class="grid grid-cols-2 gap-3">
-                {% for service in ['カット', 'パーマ', 'ヘアスタイリング', 'ヘアカラー'] %}
+                {% for service in shop.services | default(['カット', 'パーマ', 'ヘアスタイリング', 'ヘアカラー']) %}
                 <label
                     class="relative flex items-center justify-center p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-gray-50 hover:border-accent transition-all peer-checked:bg-accent/5 peer-checked:border-accent">
                     <input type="checkbox" name="services" value="{{ service }}"
